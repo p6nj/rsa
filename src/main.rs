@@ -35,11 +35,3 @@ fn divn(n: usize, p: usize) -> usize {
         false => 1,
     }
 }
-
-fn decomp(n: usize) -> (Vec<usize>, Vec<usize>) {
-    let prs = primes(n.div_euclid(2));
-    (
-        prs.clone(),
-        prs.iter().map(|prime| divn(n, *prime)).collect(),
-    )
-}
