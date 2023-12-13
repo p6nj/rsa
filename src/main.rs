@@ -1,7 +1,7 @@
 use std::num::NonZeroUsize;
 
 fn main() {
-    println!("{:?}", primes(NonZeroUsize::new(300).unwrap()));
+    println!("{:?}", primes(N::new(300).unwrap()));
 }
 
 type N = NonZeroUsize;
