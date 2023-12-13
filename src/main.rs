@@ -1,5 +1,5 @@
 fn main() {
-    println!("{:?}", divn(1000, 10));
+    println!("{:?}", decomp(100));
 }
 
 fn primes(max: usize) -> Vec<usize> {
@@ -34,4 +34,12 @@ fn divn(n: usize, p: usize) -> usize {
         true => 1 + divn(n.div_euclid(p.into()), p),
         false => 1,
     }
+}
+
+fn decomp(n: usize) -> (Vec<usize>, Vec<usize>) {
+    let prs = primes(n.div_euclid(2));
+    (
+        prs.clone(),
+        prs.iter().map(|prime| divn(n, *prime)).collect(),
+    )
 }
