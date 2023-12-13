@@ -19,3 +19,7 @@ fn primes(max: NonZeroUsize) -> Vec<usize> {
         },
     )
 }
+
+fn phi(n: NonZeroUsize) -> usize {
+    todo!()
+}
