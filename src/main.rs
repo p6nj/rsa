@@ -31,8 +31,8 @@ fn phi(n: usize) -> usize {
 
 fn divn(n: usize, p: usize) -> usize {
     match n > p {
-        true => 1 + divn(n.div_euclid(p.into()), p),
-        false => 1,
+        true => divn(n-n.div_euclid(p.into()), p) + 1,
+        false => 0,
     }
 }
 
@@ -40,6 +40,15 @@ fn decomp(n: usize) -> (Vec<usize>, Vec<usize>) {
     let prs = primes(n.div_euclid(2));
     (
         prs.clone(),
-        prs.iter().map(|prime| divn(n, *prime)).collect(),
+        prs.iter()
+            .fold((n, Vec::<usize>::new()), |(acc, mut result), prime| {
+                let n = divn(dbg!(acc), *prime);
+                result.push(n);
+                (
+                    dbg!(acc - acc.div_euclid(prime.pow(n.try_into().unwrap()))),
+                    result,
+                )
+            })
+            .1,
     )
 }
