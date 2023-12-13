@@ -1,11 +1,10 @@
 use std::num::NonZeroUsize;
 
 fn main() {
-    println!("{:?}", primes(N::new(300).unwrap()));
+    println!("{:?}", primes(NonZeroUsize::new(300).unwrap()));
 }
 
-type N = NonZeroUsize;
-fn primes(max: N) -> Vec<usize> {
+fn primes(max: NonZeroUsize) -> Vec<usize> {
     (2..((usize::from(max) as f32).sqrt() as usize) + 1).fold(
         (2..=max.into()).collect(),
         |mut acc, n: usize| {
