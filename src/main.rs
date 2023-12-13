@@ -1,5 +1,5 @@
 fn main() {
-    println!("{:?}", decomp(100));
+    println!("{:?}", decomp(13));
 }
 
 fn primes(max: usize) -> Vec<usize> {
@@ -31,7 +31,7 @@ fn phi(n: usize) -> usize {
 
 fn divn(n: usize, p: usize) -> usize {
     match n > p {
-        true => divn(n-n.div_euclid(p.into()), p) + 1,
+        true => divn(n.div_euclid(p.into()), p) + 1,
         false => 0,
     }
 }
@@ -44,10 +44,7 @@ fn decomp(n: usize) -> (Vec<usize>, Vec<usize>) {
             .fold((n, Vec::<usize>::new()), |(acc, mut result), prime| {
                 let n = divn(dbg!(acc), *prime);
                 result.push(n);
-                (
-                    dbg!(acc - acc.div_euclid(prime.pow(n.try_into().unwrap()))),
-                    result,
-                )
+                (dbg!(acc - prime.pow(n.try_into().unwrap())), result)
             })
             .1,
     )
