@@ -1,5 +1,5 @@
 fn main() {
-    println!("{:?}", primes(50));
+    println!("{:?}", decomp(50));
 }
 
 fn primes(max: usize) -> Vec<usize> {
@@ -14,6 +14,19 @@ fn primes(max: usize) -> Vec<usize> {
         })
     });
     return candidates.iter().cloned().flatten().collect();
+}
+
+fn decomp(n: usize) -> Vec<(usize, usize)> {
+    let ps = [primes(n.div_euclid(2)), vec![n]].concat();
+    let mut n = n;
+    ps.iter()
+        .map(|p| {
+            let result = (*p, n.div_euclid(*p));
+            n = n - result.0 * result.1;
+            result
+        })
+        .filter(|(_, n)| *n != 0)
+        .collect()
 }
 
 #[cfg(test)]
