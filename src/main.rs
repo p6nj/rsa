@@ -17,13 +17,19 @@ fn primes(max: usize) -> Vec<usize> {
 }
 
 fn decomp(n: usize) -> Vec<(usize, usize)> {
+    if n < 2 {
+        return vec![];
+    }
     let ps = [primes(n.div_euclid(2)), vec![n]].concat();
     let mut n = n;
     ps.iter()
         .map(|p| {
-            let result = (*p, n.div_euclid(*p));
-            n = n - result.0 * result.1;
-            result
+            let mut pow = 0;
+            while n % p == 0 {
+                n = n.div_euclid(*p);
+                pow += 1;
+            }
+            (*p, pow)
         })
         .filter(|(_, n)| *n != 0)
         .collect()
@@ -51,5 +57,27 @@ mod tests {
     #[test]
     fn primes_bully() {
         primes(1000000);
+    }
+
+    #[test]
+    fn decomp_normal() {
+        assert_eq!(vec![(2, 1), (5, 2)], decomp(50));
+    }
+
+    #[test]
+    fn decomp_prime() {
+        assert_eq!(vec![(13, 1)], decomp(13));
+    }
+
+    #[test]
+    fn decomp_illegal() {
+        assert_eq!(Vec::<(usize, usize)>::new(), decomp(0));
+        assert_eq!(Vec::<(usize, usize)>::new(), decomp(1));
+        assert_eq!(vec![(2, 1)], decomp(2));
+    }
+
+    #[test]
+    fn decomp_bully() {
+        decomp(1000000);
     }
 }
