@@ -1,5 +1,5 @@
 fn main() {
-    println!("{:?}", decomp(50));
+    println!("{:?}", phi(20));
 }
 
 fn primes(max: usize) -> Vec<usize> {
@@ -24,6 +24,9 @@ fn decomp(n: usize) -> Vec<(usize, usize)> {
     let mut n = n;
     ps.iter()
         .map(|p| {
+            if n == 1 {
+                return (*p, 0);
+            }
             let mut pow = 0;
             while n % p == 0 {
                 n = n.div_euclid(*p);
@@ -35,9 +38,22 @@ fn decomp(n: usize) -> Vec<(usize, usize)> {
         .collect()
 }
 
+fn phi(n: usize) -> usize {
+    if n < 2 {
+        return n;
+    }
+    decomp(n)
+        .iter()
+        .map(|(p, k)| p.pow((k - 1).try_into().unwrap()) * (p - 1))
+        .reduce(|acc, e| acc * e)
+        .unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    const HUGE_NUMBER: usize = 10000000;
 
     #[test]
     fn primes_normal() {
@@ -56,7 +72,7 @@ mod tests {
 
     #[test]
     fn primes_bully() {
-        primes(1000000);
+        primes(HUGE_NUMBER);
     }
 
     #[test]
@@ -66,7 +82,8 @@ mod tests {
 
     #[test]
     fn decomp_prime() {
-        assert_eq!(vec![(13, 1)], decomp(13));
+        let prime = *primes(500).last().unwrap();
+        assert_eq!(vec![(prime, 1)], decomp(prime));
     }
 
     #[test]
@@ -78,6 +95,29 @@ mod tests {
 
     #[test]
     fn decomp_bully() {
-        decomp(1000000);
+        decomp(HUGE_NUMBER);
+    }
+
+    #[test]
+    fn phi_normal() {
+        assert_eq!(144, phi(456));
+    }
+
+    #[test]
+    fn phi_prime() {
+        let prime = *primes(500).last().unwrap();
+        assert_eq!(prime - 1, phi(prime));
+    }
+
+    #[test]
+    fn phi_illegal() {
+        assert_eq!(0, phi(0));
+        assert_eq!(1, phi(1));
+        assert_eq!(1, phi(2));
+    }
+
+    #[test]
+    fn phi_bully() {
+        phi(HUGE_NUMBER);
     }
 }
