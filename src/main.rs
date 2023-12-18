@@ -26,6 +26,17 @@ fn div_exhaust(n: usize, p: usize, pow: usize) -> (usize, usize) {
     }
 }
 
+fn decomp_r(n: usize, ps: Vec<usize>) -> Vec<(usize, usize)> {
+    match n == 1 || ps.is_empty() {
+        true => vec![],
+        false => {
+            let p = ps.pop().unwrap();
+            let (n, pow) = div_exhaust(n, p, 0);
+            (vec![(p, pow)], decomp_r(n, ps)).concat()
+        }
+    }
+}
+
 fn decomp(n: usize) -> Vec<(usize, usize)> {
     if n < 2 {
         return vec![];
