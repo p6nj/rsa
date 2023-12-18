@@ -19,6 +19,13 @@ fn primes(max: usize) -> Vec<usize> {
     return candidates.iter().cloned().flatten().collect();
 }
 
+fn div_exhaust(n: usize, p: usize, pow: usize) -> (usize, usize) {
+    match n % p {
+        0 => div_exhaust(n.div_euclid(p), p, pow + 1),
+        _ => (n, pow),
+    }
+}
+
 fn decomp(n: usize) -> Vec<(usize, usize)> {
     if n < 2 {
         return vec![];
@@ -30,11 +37,8 @@ fn decomp(n: usize) -> Vec<(usize, usize)> {
             if n == 1 {
                 return (*p, 0);
             }
-            let mut pow = 0;
-            while n % p == 0 {
-                n = n.div_euclid(*p);
-                pow += 1;
-            }
+            let (next_n, pow) = div_exhaust(n, *p, 0);
+            n = next_n;
             (*p, pow)
         })
         .filter(|(_, n)| *n != 0)
