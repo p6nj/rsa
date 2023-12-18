@@ -19,27 +19,35 @@ fn primes(max: usize) -> Vec<usize> {
     return candidates.iter().cloned().flatten().collect();
 }
 
-fn div_exhaust(n: usize, p: usize, pow: usize) -> (usize, usize) {
+fn div_exhaust_r(n: usize, p: usize, pow: usize) -> (usize, usize) {
     match n % p {
-        0 => div_exhaust(n.div_euclid(p), p, pow + 1),
+        0 => div_exhaust_r(n.div_euclid(p), p, pow + 1),
         _ => (n, pow),
     }
 }
 
-fn decomp_r<'a>(n: &'a usize, ps: &'a [usize]) -> Vec<(usize, usize)> {
+fn div_exhaust(n: usize, p: usize) -> (usize, usize) {
+    div_exhaust_r(n, p, 0)
+}
+
+fn decomp_r<'a>(n: &'a usize, ps: &'a [usize], acc: Vec<(usize, usize)>) -> Vec<(usize, usize)> {
     match *n == 1 || ps.is_empty() {
-        true => vec![],
+        true => acc,
         false => {
             let (p, ps) = ps.split_first().unwrap();
-            let (n, pow) = div_exhaust(*n, *p, 0);
-            match pow {
-                0 => decomp_r(&n, ps),
-                _ => vec![(*p, pow)]
-                    .iter()
-                    .cloned()
-                    .chain(decomp_r(&n, ps).iter().cloned())
-                    .collect(),
-            }
+            let (n, pow) = div_exhaust(*n, *p);
+            decomp_r(
+                &n,
+                ps,
+                match pow {
+                    0 => acc,
+                    _ => acc
+                        .iter()
+                        .cloned()
+                        .chain([(*p, pow)].iter().cloned())
+                        .collect(),
+                },
+            )
         }
     }
 }
@@ -48,7 +56,7 @@ fn decomp(n: usize) -> Vec<(usize, usize)> {
     if n < 2 {
         return vec![];
     }
-    decomp_r(&n, &[primes(n.div_euclid(2)), vec![n]].concat())
+    decomp_r(&n, &[primes(n.div_euclid(2)), vec![n]].concat(), vec![])
 }
 
 fn phi(n: usize) -> usize {
