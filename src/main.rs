@@ -5,11 +5,11 @@ fn main() {
     println!("{:?}", phi(20));
 }
 
-fn primes(max: usize) -> Vec<usize> {
+fn primes(max: usize) -> Box<[usize]> {
     if max < 2 {
-        return vec![];
+        return Box::new([]);
     }
-    let mut candidates: Vec<Option<usize>> = (2..=max).map(|i| Some(i)).collect();
+    let mut candidates: Box<[Option<usize>]> = (2..=max).map(|i| Some(i)).collect();
     (2..=(max as f32).sqrt() as usize).for_each(|i| {
         let pow = i.pow(2);
         (0..=(max - pow).div_euclid(i)).for_each(|j| {
@@ -58,7 +58,7 @@ fn decomp(n: usize) -> Box<[(usize, usize)]> {
     }
     decomp_r(
         &n,
-        &[primes(n.div_euclid(2)), vec![n]].concat(),
+        &[primes(n.div_euclid(2)), Box::new([n])].concat(),
         Box::new([]),
     )
 }
