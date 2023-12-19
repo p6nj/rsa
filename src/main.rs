@@ -3,9 +3,9 @@ mod phi;
 mod prime;
 mod testing;
 
-use bezout::bezout;
+use bezout::{bezout, mod_mul_inv};
 use phi::phi;
 
 fn main() {
-    println!("{:?}", bezout(26, 15));
+    println!("{:?}", mod_mul_inv(51, 242));
 }
