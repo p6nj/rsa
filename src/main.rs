@@ -1,6 +1,7 @@
 mod bezout;
 mod phi;
 mod prime;
+mod rsa;
 mod testing;
 
 use bezout::{bezout, mod_mul_inv};
