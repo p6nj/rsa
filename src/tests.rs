@@ -24,20 +24,20 @@ fn primes_bully() {
 
 #[test]
 fn decomp_normal() {
-    assert_eq!(vec![(2, 1), (5, 2)], decomp(50));
+    assert_eq!(vec![(2, 1), (5, 2)], decomp(50).to_vec());
 }
 
 #[test]
 fn decomp_prime() {
     let prime = *primes(500).last().unwrap();
-    assert_eq!(vec![(prime, 1)], decomp(prime));
+    assert_eq!(vec![(prime, 1)], decomp(prime).to_vec());
 }
 
 #[test]
 fn decomp_illegal() {
-    assert_eq!(Vec::<(usize, usize)>::new(), decomp(0));
-    assert_eq!(Vec::<(usize, usize)>::new(), decomp(1));
-    assert_eq!(vec![(2, 1)], decomp(2));
+    assert_eq!(Vec::<(usize, usize)>::new(), decomp(0).to_vec());
+    assert_eq!(Vec::<(usize, usize)>::new(), decomp(1).to_vec());
+    assert_eq!(vec![(2, 1)], decomp(2).to_vec());
 }
 
 #[test]

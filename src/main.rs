@@ -30,7 +30,11 @@ fn div_exhaust(n: usize, p: usize) -> (usize, usize) {
     div_exhaust_r(n, p, 0)
 }
 
-fn decomp_r<'a>(n: &'a usize, ps: &'a [usize], acc: Vec<(usize, usize)>) -> Vec<(usize, usize)> {
+fn decomp_r<'a>(
+    n: &'a usize,
+    ps: &'a [usize],
+    acc: Box<[(usize, usize)]>,
+) -> Box<[(usize, usize)]> {
     match *n == 1 || ps.is_empty() {
         true => acc,
         false => {
@@ -41,22 +45,22 @@ fn decomp_r<'a>(n: &'a usize, ps: &'a [usize], acc: Vec<(usize, usize)>) -> Vec<
                 ps,
                 match pow {
                     0 => acc,
-                    _ => acc
-                        .iter()
-                        .cloned()
-                        .chain([(*p, pow)].iter().cloned())
-                        .collect(),
+                    _ => [acc, Box::new([(*p, pow)])].concat().into(),
                 },
             )
         }
     }
 }
 
-fn decomp(n: usize) -> Vec<(usize, usize)> {
+fn decomp(n: usize) -> Box<[(usize, usize)]> {
     if n < 2 {
-        return vec![];
+        return Box::new([]);
     }
-    decomp_r(&n, &[primes(n.div_euclid(2)), vec![n]].concat(), vec![])
+    decomp_r(
+        &n,
+        &[primes(n.div_euclid(2)), vec![n]].concat(),
+        Box::new([]),
+    )
 }
 
 fn phi(n: usize) -> usize {
