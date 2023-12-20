@@ -6,6 +6,11 @@ use super::*;
 fn enc_dec() {
     let n = 101 * 103;
     let e = 7;
-    let m = 10331;
-    assert_eq!(m, rsadec(n, mod_mul_inv(e, phi(n)), rsaenc(n, e, m)));
+    let m = [1, 0, 3, 3, 1];
+    assert_eq!(
+        m.to_vec(),
+        m.map(|i| rsaenc(n, e, i))
+            .map(|i| rsadec(n, mod_mul_inv(e, phi(n)), i))
+            .to_vec()
+    )
 }
