@@ -4,9 +4,15 @@ mod prime;
 mod rsa;
 mod testing;
 
-use bezout::{bezout, mod_mul_inv};
+use bezout::mod_mul_inv;
 use phi::phi;
+use rsa::{rsadec, rsaenc};
 
 fn main() {
-    println!("{:?}", mod_mul_inv(51, 242));
+    let n = 101 * 103;
+    let e = 7;
+    let m = 10331;
+    let encrypted = rsaenc(n, e, m);
+    println!("{:?}", encrypted);
+    println!("{:?}", rsadec(n, mod_mul_inv(e, phi(n)), encrypted));
 }
